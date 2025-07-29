@@ -1,0 +1,78 @@
+/*
+ ========================================
+ MÓDULO 3: IDENTIDADE VISUAL E TEMA
+ ========================================
+ Neste arquivo, definimos as "variáveis" globais de design,
+ como cores e fontes, baseadas na identidade do Google.
+ Também definimos os estilos básicos para o tema Neumórfico.
+*/
+
+/* Importa a fonte 'Roboto' diretamente do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  /* --- Paleta de Cores (Modo Claro) --- */
+  --cor-primaria: #4285F4;  /* Azul Google */
+  --cor-texto-principal: #3c4043; /* Cinza Escuro */
+  --cor-texto-secundario: #5f6368; /* Cinza Médio */
+  --cor-fundo: #e0e5ec; /* Cinza muito claro para o efeito Neumórfico */
+  --cor-superficie: #e0e5ec; /* Mesma cor do fundo para os elementos */
+  --cor-borda-suave: #dadce0; /* Cinza Claro */
+  --cor-branco: #ffffff;
+  --cor-preto: #000000;
+
+  /* --- Sombras Neumórficas (Modo Claro) --- */
+  /* Sombra clara (em cima e à esquerda) e sombra escura (em baixo e à direita) */
+  --sombra-neumorfica: 10px 10px 20px #a3b1c6, -10px -10px 20px #ffffff;
+  --sombra-neumorfica-inset: inset 8px 8px 15px #a3b1c6, inset -8px -8px 15px #ffffff;
+
+
+  /* --- Tipografia --- */
+  --fonte-principal: 'Roboto', sans-serif;
+
+  /* --- Transições --- */
+  --transicao-padrao: all 0.3s ease;
+}
+
+/* Futuramente, aqui adicionaremos as variáveis para o MODO ESCURO */
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+    ...
+  }
+}
+*/
+/*
+ ========================================
+ MÓDULO 3: ESTILOS GLOBAIS
+ ========================================
+ Este arquivo usa as variáveis do theme.css para aplicar
+ estilos gerais a todo o aplicativo.
+*/
+
+/* --- Reset Básico e Padrões Globais --- */
+
+* {
+  /*
+    Isso garante que padding e bordas não aumentem o tamanho final do elemento.
+    É uma prática padrão para um layout mais previsível.
+  */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Aplicando as variáveis que definimos no theme.css */
+  font-family: var(--fonte-principal);
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto-principal);
+
+  /* Melhora a legibilidade do texto */
+  line-height: 1.6;
+
+  /* Prepara o terreno para centralizar o conteúdo principal no futuro */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Garante que o corpo ocupe pelo menos 100% da altura da tela */
+}
