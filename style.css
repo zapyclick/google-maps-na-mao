@@ -77,3 +77,52 @@ textarea:focus {
   /* Efeito de "pressionar" o botão */
   box-shadow: var(--sombra-neumorfica-inset);
 }
+/* --- Estilos para a Área de Upload de Imagem --- */
+
+.image-drop-zone {
+  border: 2px dashed var(--cor-borda-suave);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+}
+
+.image-drop-zone:hover {
+  /* Feedback visual ao passar o mouse */
+  border-color: var(--cor-primaria);
+  background-color: #f8f9fa; /* Um branco levemente acinzentado */
+}
+
+.image-preview-container img {
+  /* Garante que a imagem de preview não quebre o layout */
+  max-width: 100%;
+  border-radius: 12px;
+}
+/* Estilo para quando um arquivo está sendo arrastado sobre a área */
+.image-drop-zone.drag-over {
+  background-color: #f0f5fc;
+  border-color: var(--cor-primaria);
+}
+/* --- Estilos para a Área de Preview e Botão de Troca --- */
+.image-preview-container {
+  text-align: center; /* Centraliza a imagem e o botão */
+}
+
+.image-preview-container img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 1rem; /* Espaço entre a imagem e o botão de troca */
+}
+
+#change-image-button {
+  /* Estilo de link para uma ação secundária */
+  background: none;
+  border: none;
+  color: var(--cor-primaria);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: var(--fonte-principal);
+}

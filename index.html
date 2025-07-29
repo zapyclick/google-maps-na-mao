@@ -35,8 +35,10 @@
         <p>Arraste e solte uma imagem aqui ou clique para selecionar</p>
         <input type="file" id="post-image" name="post-image" accept="image/*" hidden>
       </div>
-      <div id="image-preview" class="image-preview-container" hidden></div>
-    </div>
+      <div id="image-preview" class="image-preview-container" hidden>
+  <!-- A imagem selecionada aparecerá aqui via JavaScript -->
+  <button type="button" id="change-image-button">Escolher outra imagem</button>
+</div>
 
     <!-- Botão para submeter o formulário -->
     <button type="submit" id="submit-button">Gerar Postagem</button>
@@ -48,5 +50,9 @@
 <footer>
 
 </footer>
+
+<!-- Link para o arquivo de script (JavaScript) -->
+<script src="script.js"></script>
+
 </body>
 </html>
