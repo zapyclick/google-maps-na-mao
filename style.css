@@ -1,0 +1,79 @@
+/*
+ ========================================
+ MÓDULO 4: ESTILOS DO FORMULÁRIO
+ ========================================
+*/
+
+main {
+  /* Transforma o container principal em um "cartão" neumórfico */
+  width: 90%;
+  max-width: 700px; /* Limita a largura em telas grandes */
+  margin: 3rem auto; /* Centraliza o cartão na tela com margens */
+  padding: 2rem;
+  border-radius: 20px;
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-neumorfica);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--cor-texto-secundario);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500; /* Um pouco mais de peso na fonte */
+  color: var(--cor-texto-secundario);
+}
+
+/* Estilo para Textarea e futuros Inputs de texto */
+textarea {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-fundo);
+  font-family: var(--fonte-principal);
+  font-size: 1rem;
+  color: var(--cor-texto-principal);
+
+  /* Efeito "inset" - parece que está afundado */
+  box-shadow: var(--sombra-neumorfica-inset);
+  transition: var(--transicao-padrao);
+}
+
+textarea:focus {
+  /* Remove a borda padrão que o navegador coloca ao clicar */
+  outline: none;
+}
+
+/* Estilo do botão principal */
+#submit-button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--sombra-neumorfica);
+  transition: var(--transicao-padrao);
+}
+
+#submit-button:hover {
+  /* Suaviza o botão ao passar o mouse */
+  opacity: 0.9;
+}
+
+#submit-button:active {
+  /* Efeito de "pressionar" o botão */
+  box-shadow: var(--sombra-neumorfica-inset);
+}

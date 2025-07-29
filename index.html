@@ -16,7 +16,32 @@
 
 <!-- CONTEÚDO PRINCIPAL DO APLICATIVO -->
 <main>
+  <!-- Título da seção principal -->
+  <h1>Crie sua Próxima Postagem para o Google</h1>
 
+  <!-- Formulário de criação de post -->
+  <form id="post-form">
+
+    <!-- Campo de texto para a descrição do post -->
+    <div class="form-group">
+      <label for="post-text">Texto da Postagem (Opcional):</label>
+      <textarea id="post-text" name="post-text" rows="8" placeholder="Ex: Aproveite nossa promoção de 20% de desconto em todos os cafés! Válido somente esta semana. #promo #café"></textarea>
+    </div>
+
+    <!-- Área de upload de imagem -->
+    <div class="form-group">
+      <label for="post-image">Imagem da Postagem:</label>
+      <div id="image-uploader" class="image-drop-zone">
+        <p>Arraste e solte uma imagem aqui ou clique para selecionar</p>
+        <input type="file" id="post-image" name="post-image" accept="image/*" hidden>
+      </div>
+      <div id="image-preview" class="image-preview-container" hidden></div>
+    </div>
+
+    <!-- Botão para submeter o formulário -->
+    <button type="submit" id="submit-button">Gerar Postagem</button>
+
+  </form>
 </main>
 
 <!-- RODAPÉ DA PÁGINA -->
