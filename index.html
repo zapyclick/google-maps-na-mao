@@ -4,55 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Maps na Mão</title>
-    <!-- Link para os arquivos de estilo (CSS) -->
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="style.css">
+    <!-- Biblioteca de Edição de Imagem (Fabric.js) -->
+<script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
+
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- CABEÇALHO DA PÁGINA -->
-<header>
 
-</header>
+    <header></header>
 
-<!-- CONTEÚDO PRINCIPAL DO APLICATIVO -->
-<main>
-  <!-- Título da seção principal -->
-  <h1>Crie sua Próxima Postagem para o Google</h1>
+    <main>
+        <h1>Crie sua Próxima Postagem para o Google</h1>
 
-  <!-- Formulário de criação de post -->
-  <form id="post-form">
+        <form id="post-form">
+            <div class="form-group">
+                <label for="post-text">Texto da Postagem (Opcional):</label>
+                <textarea id="post-text" name="post-text" rows="8" placeholder="Ex: Aproveite nossa promoção de 20% de desconto em todos os cafés! Válido somente esta semana. #promo #café"></textarea>
+            </div>
 
-    <!-- Campo de texto para a descrição do post -->
-    <div class="form-group">
-      <label for="post-text">Texto da Postagem (Opcional):</label>
-      <textarea id="post-text" name="post-text" rows="8" placeholder="Ex: Aproveite nossa promoção de 20% de desconto em todos os cafés! Válido somente esta semana. #promo #café"></textarea>
-    </div>
+            <div class="form-group">
+                <label>Imagem da Postagem:</label>
 
-    <!-- Área de upload de imagem -->
-    <div class="form-group">
-      <label for="post-image">Imagem da Postagem:</label>
-      <div id="image-uploader" class="image-drop-zone">
-        <p>Arraste e solte uma imagem aqui ou clique para selecionar</p>
-        <input type="file" id="post-image" name="post-image" accept="image/*" hidden>
-      </div>
-      <div id="image-preview" class="image-preview-container" hidden>
-  <!-- A imagem selecionada aparecerá aqui via JavaScript -->
-  <button type="button" id="change-image-button">Escolher outra imagem</button>
+                <!-- ÁREA 1: UPLOAD E BUSCA (Visível no início) -->
+                <div id="image-selection-area">
+                    <div id="image-uploader" class="image-drop-zone">
+                        <div class="unsplash-search-container">
+                            <input type="text" id="unsplash-search-input" placeholder="Ou busque uma imagem profissional no Unsplash...">
+                            <button type="button" id="unsplash-search-button">Buscar</button>
+                        </div>
+                        <p class="separator-text">ou</p>
+                        <p>Arraste e solte uma imagem do seu computador aqui ou clique para selecionar</p>
+                        <input type="file" id="post-image" name="post-image" accept="image/*" hidden>
+                    </div>
+                    <div id="unsplash-results"></div>
+                </div>
+
+                <!-- ÁREA 2: EDITOR (Ficará visível após selecionar a imagem) -->
+                <div id="editor-area" hidden>
+                    <canvas id="image-canvas" width="800" height="600"></canvas>
+                    <div class="editor-controls">
+    <button type="button" id="add-text-button" class="control-button">Adicionar Texto</button>
+    <button type="button" id="add-logo-button" class="control-button">Adicionar Logo</button>
+    <button type="button" id="change-image-button">Escolher outra imagem</button>
 </div>
+                </div>
+            </div>
 
-    <!-- Botão para submeter o formulário -->
-    <button type="submit" id="submit-button">Gerar Postagem</button>
+            <button type="submit" id="submit-button">Gerar Postagem</button>
+        </form>
+    </main>
 
-  </form>
-</main>
+    <footer></footer>
 
-<!-- RODAPÉ DA PÁGINA -->
-<footer>
-
-</footer>
-
-<!-- Link para o arquivo de script (JavaScript) -->
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>

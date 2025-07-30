@@ -126,3 +126,116 @@ textarea:focus {
   font-size: 0.9rem;
   font-family: var(--fonte-principal);
 }
+/* --- Estilos para a Busca no Unsplash --- */
+
+.unsplash-search-container {
+  display: flex; /* Alinha o campo e o botão na mesma linha */
+  gap: 0.5rem; /* Espaço entre o campo e o botão */
+  margin-bottom: 1rem;
+}
+
+#unsplash-search-input {
+  flex-grow: 1; /* Faz o campo de busca ocupar o espaço disponível */
+  /* Reutiliza o estilo do nosso textarea */
+  padding: 0.8rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-fundo);
+  font-family: var(--fonte-principal);
+  font-size: 0.9rem;
+  color: var(--cor-texto-principal);
+  box-shadow: var(--sombra-neumorfica-inset);
+}
+
+#unsplash-search-button {
+  /* Reutiliza parte do estilo do nosso botão principal */
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--sombra-neumorfica);
+  transition: var(--transicao-padrao);
+}
+
+#unsplash-search-button:active {
+  box-shadow: var(--sombra-neumorfica-inset);
+}
+
+.separator-text {
+  font-weight: 500;
+  color: var(--cor-texto-secundario);
+  margin-bottom: 1rem;
+}
+/* --- Estilos para os Resultados da Busca Unsplash --- */
+
+#unsplash-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.unsplash-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.unsplash-image:hover {
+  transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+/* --- Estilos para a Área do Editor e Canvas --- */
+
+#editor-area {
+  /* Removemos o 'hidden' do HTML e controlamos via CSS se quisermos usar display:flex etc. */
+  /* Por enquanto, o 'hidden' do HTML resolve. */
+}
+
+#image-canvas {
+  max-width: 100%; /* Garante que o canvas seja responsivo e não quebre o layout */
+  border-radius: 12px;
+  background-color: var(--cor-branco); /* Fundo branco para o canvas */
+  box-shadow: var(--sombra-neumorfica-inset); /* Efeito de profundidade */
+}
+
+.editor-controls {
+  text-align: center;
+  margin-top: 1rem;
+}
+/* --- Estilos para os Controles do Editor --- */
+.editor-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas pequenas */
+  margin-top: 1rem;
+}
+
+.control-button {
+  /* Estilo neumórfico para os botões de ação */
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-secundario);
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--sombra-neumorfica);
+  transition: var(--transicao-padrao);
+}
+
+.control-button:hover {
+  color: var(--cor-primaria);
+}
+
+.control-button:active {
+  box-shadow: var(--sombra-neumorfica-inset);
+}
