@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const unsplashResultsContainer = document.getElementById('unsplash-results');
     const changeImageButton = document.getElementById('change-image-button');
     const addTextButton = document.getElementById('add-text-button');
+    const addLogoButton = document.getElementById('add-logo-button');
+    const logoInput = document.getElementById('logo-input');
     const textStyleControls = document.getElementById('text-style-controls');
     const textColorInput = document.getElementById('text-color');
     const textBgColorInput = document.getElementById('text-bg-color');
@@ -37,11 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             textBgColorInput.value = activeObject.get('backgroundColor') || '#ffffff';
             borderColorInput.value = activeObject.get('stroke') || '#ffffff';
             borderWidthInput.value = activeObject.get('strokeWidth') || 0;
-            if (activeObject.get('fontWeight') === 'bold') {
-                toggleBoldButton.classList.add('active');
-            } else {
-                toggleBoldButton.classList.remove('active');
-            }
+            toggleBoldButton.classList.toggle('active', activeObject.get('fontWeight') === 'bold');
         } else {
             textStyleControls.hidden = true;
         }
@@ -65,11 +63,33 @@ document.addEventListener('DOMContentLoaded', function() {
     function addText() {
         const text = new fabric.IText('Edite este texto', {
             left: 100, top: 100, fontFamily: 'Roboto', fill: '#000000', fontSize: 40, padding: 5,
-            paintFirst: 'stroke'
+            paintFirst: 'stroke', cornerColor: 'blue', cornerSize: 10, transparentCorners: false
         });
         fabricCanvas.add(text);
         fabricCanvas.setActiveObject(text);
         fabricCanvas.renderAll();
+    }
+
+    function addLogo(imageUrl) {
+        fabric.Image.fromURL(imageUrl, function(logoImg) {
+            logoImg.scaleToWidth(150);
+            logoImg.set({
+                left: 150, top: 150, cornerColor: 'blue', cornerSize: 10, transparentCorners: false
+            });
+            fabricCanvas.add(logoImg);
+            fabricCanvas.setActiveObject(logoImg);
+            fabricCanvas.renderAll();
+        }, { crossOrigin: 'Anonymous' });
+    }
+
+    function handleLogoFileSelect(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => addLogo(e.target.result);
+            reader.readAsDataURL(file);
+        } else if (file) {
+            alert('Arquivo de logo inválido. Selecione um PNG ou JPG.');
+        }
     }
 
     function applyStyle(styleFunction) {
@@ -122,4 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (postImageInput) { postImageInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0])); }
     if (addTextButton) { addTextButton.addEventListener('click', addText); }
     if (changeImageButton) { changeImageButton.addEventListener('click', resetEditor); }
+    if (addLogoButton) { addLogoButton.addEventListener('click', () => logoInput.click()); }
+    if (logoInput) { logoInput.addEventListener('change', (e) => { if (e.target.files.length > 0) { handleLogoFileSelect(e.target.files[0]); } }); }
 });
