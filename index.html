@@ -41,12 +41,40 @@
                 </div>
 
                 <!-- ÁREA 2: EDITOR (Ficará visível após selecionar a imagem) -->
-                <div id="editor-area" hidden>
-                    <canvas id="image-canvas" width="800" height="600"></canvas>
-                    <div class="editor-controls">
-    <button type="button" id="add-text-button" class="control-button">Adicionar Texto</button>
-    <button type="button" id="add-logo-button" class="control-button">Adicionar Logo</button>
-    <button type="button" id="change-image-button">Escolher outra imagem</button>
+                <!-- ÁREA 2: EDITOR (Ficará visível após selecionar a imagem) -->
+<div id="editor-area" hidden>
+    <!-- NOVO: Painel de ferramentas de estilo de texto -->
+    <!-- Painel de ferramentas de estilo de texto -->
+<!-- Painel de ferramentas de estilo de texto -->
+<div id="text-style-controls" hidden>
+    <div class="style-group">
+        <label for="text-color">Cor do Texto</label>
+        <input type="color" id="text-color" value="#000000">
+    </div>
+    <div class="style-group">
+        <label for="text-bg-color">Fundo</label>
+        <input type="color" id="text-bg-color" value="#ffffff">
+        <button type="button" id="transparent-bg-button" class="control-button-icon" title="Fundo Transparente">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z M16.95 7.05l-10 10L5.05 15.1l10-10L16.95 7.05z"/></svg>
+        </button>
+    </div>
+    <div class="style-group">
+        <label for="border-color">Borda</label>
+        <input type="color" id="border-color" value="#ffffff">
+        <input type="range" id="border-width" min="0" max="3" value="0" step="0.1" title="Espessura da Borda">
+    </div>
+    <div class="style-group">
+        <button type="button" id="toggle-bold-button" class="control-button"><b>B</b></button>
+    </div>
+</div>
+
+    <canvas id="image-canvas" width="800" height="600"></canvas>
+    
+    <div class="editor-controls">
+        <button type="button" id="add-text-button" class="control-button">Adicionar Texto</button>
+        <button type="button" id="add-logo-button" class="control-button">Adicionar Logo</button>
+        <button type="button" id="change-image-button">Escolher outra imagem</button>
+    </div>
 </div>
                 </div>
             </div>
