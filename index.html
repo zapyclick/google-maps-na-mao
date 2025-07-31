@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Maps na Mão</title>
     <!-- Biblioteca de Edição de Imagem (Fabric.js) -->
-<script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
     <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -20,17 +19,17 @@
         <form id="post-form">
             <div class="form-group">
                 <label for="post-text">Texto da Postagem (Opcional):</label>
-                <textarea id="post-text" name="post-text" rows="8" placeholder="Ex: Aproveite nossa promoção de 20% de desconto em todos os cafés! Válido somente esta semana. #promo #café"></textarea>
+                <textarea id="post-text" name="post-text" rows="8" placeholder="Ex: Aproveite nossa promoção de 20% de desconto..."></textarea>
             </div>
 
             <div class="form-group">
                 <label>Imagem da Postagem:</label>
 
-                <!-- ÁREA 1: UPLOAD E BUSCA (Visível no início) -->
+                <!-- ÁREA 1: UPLOAD E BUSCA -->
                 <div id="image-selection-area">
                     <div id="image-uploader" class="image-drop-zone">
                         <div class="unsplash-search-container">
-                            <input type="text" id="unsplash-search-input" placeholder="Ou busque uma imagem profissional no Unsplash...">
+                            <input type="text" id="unsplash-search-input" placeholder="Ou busque uma imagem profissional...">
                             <button type="button" id="unsplash-search-button">Buscar</button>
                         </div>
                         <p class="separator-text">ou</p>
@@ -40,44 +39,36 @@
                     <div id="unsplash-results"></div>
                 </div>
 
-                <!-- ÁREA 2: EDITOR (Ficará visível após selecionar a imagem) -->
-                <!-- ÁREA 2: EDITOR (Ficará visível após selecionar a imagem) -->
-<div id="editor-area" hidden>
-  <!-- Input invisível para o logo -->
-<input type="file" id="logo-input" accept="image/png, image/jpeg" hidden>
-    <!-- NOVO: Painel de ferramentas de estilo de texto -->
-    <!-- Painel de ferramentas de estilo de texto -->
-<!-- Painel de ferramentas de estilo de texto -->
-<div id="text-style-controls" hidden>
-    <div class="style-group">
-        <label for="text-color">Cor do Texto</label>
-        <input type="color" id="text-color" value="#000000">
-    </div>
-    <div class="style-group">
-        <label for="text-bg-color">Fundo</label>
-        <input type="color" id="text-bg-color" value="#ffffff">
-        <button type="button" id="transparent-bg-button" class="control-button-icon" title="Fundo Transparente">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z M16.95 7.05l-10 10L5.05 15.1l10-10L16.95 7.05z"/></svg>
-        </button>
-    </div>
-    <div class="style-group">
-        <label for="border-color">Borda</label>
-        <input type="color" id="border-color" value="#ffffff">
-        <input type="range" id="border-width" min="0" max="3" value="0" step="0.1" title="Espessura da Borda">
-    </div>
-    <div class="style-group">
-        <button type="button" id="toggle-bold-button" class="control-button"><b>B</b></button>
-    </div>
-</div>
-
-    <canvas id="image-canvas" width="800" height="600"></canvas>
-    
-    <div class="editor-controls">
-        <button type="button" id="add-text-button" class="control-button">Adicionar Texto</button>
-        <button type="button" id="add-logo-button" class="control-button">Adicionar Logo</button>
-        <button type="button" id="change-image-button">Escolher outra imagem</button>
-    </div>
-</div>
+                <!-- ÁREA 2: EDITOR -->
+                <div id="editor-area" hidden>
+                    <input type="file" id="logo-input" accept="image/png, image/jpeg" hidden>
+                    <div id="text-style-controls" hidden>
+                        <div class="style-group">
+                            <label for="text-color">Cor do Texto</label>
+                            <input type="color" id="text-color" value="#000000">
+                        </div>
+                        <div class="style-group">
+                            <label for="text-bg-color">Fundo</label>
+                            <input type="color" id="text-bg-color" value="#ffffff">
+                            <button type="button" id="transparent-bg-button" class="control-button-icon" title="Fundo Transparente">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z M16.95 7.05l-10 10L5.05 15.1l10-10L16.95 7.05z"/></svg>
+                            </button>
+                        </div>
+                        <div class="style-group">
+                            <label for="border-color">Borda</label>
+                            <input type="color" id="border-color" value="#ffffff">
+                            <input type="range" id="border-width" min="0" max="3" value="0" step="0.1" title="Espessura da Borda">
+                        </div>
+                        <div class="style-group">
+                            <button type="button" id="toggle-bold-button" class="control-button"><b>B</b></button>
+                        </div>
+                    </div>
+                    <canvas id="image-canvas" width="800" height="600" tabindex="0"></canvas>
+                    <div class="editor-controls">
+                        <button type="button" id="add-text-button" class="control-button">Adicionar Texto</button>
+                        <button type="button" id="add-logo-button" class="control-button">Adicionar Logo</button>
+                        <button type="button" id="change-image-button">Escolher outra imagem</button>
+                    </div>
                 </div>
             </div>
 
@@ -86,6 +77,34 @@
     </main>
 
     <footer></footer>
+
+    <!-- Botão flutuante para abrir o assistente de IA -->
+    <button id="ai-assistant-button" class="floating-action-button" title="Assistente de Conteúdo IA">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 004.472-.69a.75.75 0 11.584 1.362A10.47 10.47 0 0118 16.5a10.5 10.5 0 01-10.5-10.5 10.47 10.47 0 01.69-4.472.75.75 0 01.819.162z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M11.54 2.363a.75.75 0 011.06.04l3 3.5a.75.75 0 01-1.1 1.02l-3-3.5a.75.75 0 01.04-1.06zM6.75 12.75a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5h-3.5a.75.75 0 01-.75-.75zM6 15.75a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5h-3.5a.75.75 0 01-.75-.75zM6 18.75a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5h-3.5a.75.75 0 01-.75-.75z" clip-rule="evenodd" /></svg>
+        <span>Criar com IA</span>
+    </button>
+
+    <!-- Painel lateral (drawer) do assistente de IA -->
+    <aside id="ai-drawer" class="ai-drawer">
+        <button id="close-ai-drawer-button" class="close-button">×</button>
+        <h2>Assistente de Conteúdo IA</h2>
+        <div class="form-group">
+            <label for="ai-goal-input">Qual é o seu objetivo hoje?</label>
+            <input type="text" id="ai-goal-input" placeholder="Ex: Promover happy hour...">
+        </div>
+        <div class="form-group">
+            <label>Qual o tipo de postagem?</label>
+            <div id="ai-post-type-buttons" class="post-type-buttons">
+                <button class="post-type-button" data-type="Oferta">Oferta</button>
+                <button class="post-type-button" data-type="Novidade">Novidade</button>
+                <button class="post-type-button" data-type="Evento">Evento</button>
+            </div>
+        </div>
+        <button id="generate-ai-content-button" class="ai-generate-button">Gerar Ideias</button>
+        <div id="ai-results-area" class="ai-results">
+            <!-- Os resultados da IA aparecerão aqui -->
+        </div>
+    </aside>
 
     <script src="script.js"></script>
 </body>

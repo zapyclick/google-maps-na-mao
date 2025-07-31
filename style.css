@@ -323,3 +323,306 @@ input[type="range"] {
   box-shadow: var(--sombra-neumorfica-inset);
   color: var(--cor-primaria);
 }
+/*
+ ========================================
+ MÓDULO 8: ESTILOS DO ASSISTENTE DE IA
+ ========================================
+*/
+
+./* Botão Flutuante (Versão Melhorada) */
+
+
+/* Painel Lateral (Drawer) */
+/* Painel Lateral (Drawer) */
+.ai-drawer {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  max-width: 90%;
+  height: 100%;
+  background-color: var(--cor-fundo);
+  box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+  z-index: 1001;
+  padding: 2rem;
+  overflow-y: auto;
+  transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.4s;
+  
+  /* Começa invisível para o navegador */
+  visibility: hidden; 
+}
+
+.ai-drawer.open {
+  right: 0;
+  /* Torna-se visível quando a classe .open é adicionada */
+  visibility: visible;
+}
+
+.ai-drawer .close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+}
+
+.ai-drawer h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.post-type-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.post-type-button {
+  flex-grow: 1;
+  /* Reutiliza o estilo dos botões de controle do editor */
+  padding: 0.8rem;
+  border: 1px solid var(--cor-borda-suave);
+  border-radius: 12px;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+}
+
+.post-type-button.active {
+  background-color: var(--cor-primaria);
+  color: var(--cor-branco);
+  border-color: var(--cor-primaria);
+}
+
+.ai-generate-button {
+  /* Reutiliza o estilo do botão principal */
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1.5rem;
+}
+
+.ai-results {
+  margin-top: 2rem;
+}
+/*
+ ========================================
+ MÓDULO 8: ESTILOS DO ASSISTENTE DE IA
+ ========================================
+*/
+
+/* Botão Flutuante (Versão Melhorada) */
+.floating-action-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  border-radius: 50px; 
+  width: auto;
+  height: 60px;
+  padding: 0 1.5rem;
+  background-color: var(--cor-primaria);
+  color: var(--cor-branco);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 1rem;
+  font-weight: 700;
+  animation: pulse 2s infinite;
+  transition: transform 0.2s ease;
+}
+
+.floating-action-button:hover {
+  animation: none;
+  transform: scale(1.05);
+}
+
+/* Definição da Animação de Pulso */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(66, 133, 244, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(66, 133, 244, 0);
+  }
+}
+
+/* Painel Lateral (Drawer) - Abordagem com Transform */
+.ai-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  max-width: 90%;
+  height: 100%;
+  background-color: var(--cor-fundo);
+  box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+  z-index: 1001;
+  padding: 2rem;
+  overflow-y: auto;
+  
+  /* Começa fora da tela e invisível */
+  transform: translateX(105%);
+  visibility: hidden;
+  transition: transform 0.4s ease-in-out, visibility 0.4s;
+}
+
+.ai-drawer.open {
+  /* Volta para a posição original e fica visível */
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.ai-drawer .close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+}
+
+.ai-drawer h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.post-type-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.post-type-button {
+  flex-grow: 1;
+  padding: 0.8rem;
+  border: 1px solid var(--cor-borda-suave);
+  border-radius: 12px;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+}
+
+.post-type-button.active {
+  background-color: var(--cor-primaria);
+  color: var(--cor-branco);
+  border-color: var(--cor-primaria);
+}
+
+.ai-generate-button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1.5rem;
+}
+
+.ai-results {
+  margin-top: 2rem;
+}
+/* Aplica o estilo neumórfico "inset" ao campo de texto do painel de IA */
+#ai-goal-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-fundo);
+  font-family: var(--fonte-principal);
+  font-size: 0.9rem;
+  color: var(--cor-texto-principal);
+  box-shadow: var(--sombra-neumorfica-inset);
+}
+
+/* Estilo para os botões de tipo de post */
+.post-type-button {
+  flex-grow: 1;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  box-shadow: var(--sombra-neumorfica);
+  transition: var(--transicao-padrao);
+}
+
+.post-type-button:hover {
+  color: var(--cor-primaria);
+}
+
+/* Estilo para quando o botão de tipo de post está ativo/selecionado */
+.post-type-button.active {
+  box-shadow: var(--sombra-neumorfica-inset);
+  color: var(--cor-primaria);
+  background-color: var(--cor-superficie); /* Mantém a cor de fundo */
+  border: none; /* Remove a borda que colocamos antes */
+}
+
+/* Estilo para o botão principal de gerar ideias */
+.ai-generate-button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  box-shadow: var(--sombra-neumorfica);
+  transition: var(--transicao-padrao);
+}
+
+.ai-generate-button:active {
+  box-shadow: var(--sombra-neumorfica-inset);
+}
+.ai-result-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--cor-borda-suave);
+}
+.ai-result-item:last-child {
+  border-bottom: none;
+}
+.ai-result-item h4 {
+  margin-bottom: 0.5rem;
+  color: var(--cor-texto-secundario);
+}
+.ai-result-item p {
+  margin-bottom: 1rem;
+}
+.use-text-button {
+  /* Estilo de link para uma ação secundária */
+  background: none;
+  border: none;
+  color: var(--cor-primaria);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: var(--fonte-principal);
+  padding: 0;
+}
