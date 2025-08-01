@@ -1,0 +1,24 @@
+{
+  "name": "google-maps-na-mao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zapyclick/google-maps-na-mao.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/zapyclick/google-maps-na-mao/issues"
+  },
+  "homepage": "https://github.com/zapyclick/google-maps-na-mao#readme",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}

@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- CHAVES DE API (ATUALIZADO) ---
+    // --- CHAVES DE API ---
     const UNSPLASH_ACCESS_KEY = 'KBW9bmH_7GwSA7phZx06SDUcQ4ZCatAmFFjCL5PLgLI';
-    const DEEPSEEK_API_KEY = 'sk-8f424e8e43fb4324a3babe89f3b78469';
 
     // Elementos da UI
     const imageSelectionArea = document.getElementById('image-selection-area');
@@ -35,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicialização da Fabric.js
     const fabricCanvas = new fabric.Canvas('image-canvas', { width: 800, height: 600, backgroundColor: '#ffffff' });
 
-    // --- LÓGICA DO EDITOR DE IMAGEM (sem alterações) ---
+    // --- LÓGICA DO EDITOR DE IMAGEM ---
     function updateTextStyleControls() { const activeObject = fabricCanvas.getActiveObject(); if (activeObject && activeObject.type === 'i-text') { textStyleControls.hidden = false; textColorInput.value = activeObject.get('fill') || '#000000'; textBgColorInput.value = activeObject.get('backgroundColor') || '#ffffff'; borderColorInput.value = activeObject.get('stroke') || '#ffffff'; borderWidthInput.value = activeObject.get('strokeWidth') || 0; toggleBoldButton.classList.toggle('active', activeObject.get('fontWeight') === 'bold'); } else { textStyleControls.hidden = true; } }
     function loadBackgroundImage(imageUrl) { fabric.Image.fromURL(imageUrl, function(img) { const canvasWidth = fabricCanvas.width; const canvasHeight = fabricCanvas.height; const imgAspectRatio = img.width / img.height; const canvasAspectRatio = canvasWidth / canvasHeight; let scale = (imgAspectRatio > canvasAspectRatio) ? (canvasWidth / img.width) : (canvasHeight / img.height); img.set({ scaleX: scale, scaleY: scale, originX: 'center', originY: 'center' }); fabricCanvas.setBackgroundImage(img, fabricCanvas.renderAll.bind(fabricCanvas), { top: canvasHeight / 2, left: canvasWidth / 2 }); editorArea.hidden = false; imageSelectionArea.hidden = true; if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = ''; }, { crossOrigin: 'Anonymous' }); }
     function addText() { const text = new fabric.IText('Edite este texto', { left: 100, top: 100, fontFamily: 'Roboto', fill: '#000000', fontSize: 40, padding: 5, paintFirst: 'stroke', cornerColor: 'blue', cornerSize: 10, transparentCorners: false }); fabricCanvas.add(text); fabricCanvas.setActiveObject(text); fabricCanvas.renderAll(); }
@@ -51,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function resetEditor() { fabricCanvas.clear(); fabricCanvas.setBackgroundImage(null, fabricCanvas.renderAll.bind(fabricCanvas)); editorArea.hidden = true; imageSelectionArea.hidden = false; }
     async function searchUnsplash(query) { if (!query) return; unsplashSearchButton.textContent = 'Buscando...'; unsplashSearchButton.disabled = true; const endpoint = `https://api.unsplash.com/search/photos?query=${query}&per_page=12&client_id=${UNSPLASH_ACCESS_KEY}`; try { const response = await fetch(endpoint); const data = await response.json(); if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = ''; if (data.results && data.results.length > 0) { data.results.forEach(photo => { const img = document.createElement('img'); img.src = photo.urls.small; img.classList.add('unsplash-image'); img.addEventListener('click', () => loadBackgroundImage(photo.urls.regular)); unsplashResultsContainer.appendChild(img); }); } else { if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = '<p>Nenhum resultado encontrado.</p>'; } } catch (error) { if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = '<p>Erro ao buscar imagens.</p>'; } finally { unsplashSearchButton.textContent = 'Buscar'; unsplashSearchButton.disabled = false; } }
 
-    // --- LÓGICA DO ASSISTENTE DE IA (ATUALIZADO PARA DEEPSEEK) ---
+    // --- LÓGICA DO ASSISTENTE DE IA (COM LEITURA ROBUSTA) ---
     let selectedPostType = '';
     function handlePostTypeSelection(event) {
         const clickedButton = event.target.closest('.post-type-button');
@@ -67,23 +66,37 @@ document.addEventListener('DOMContentLoaded', function() {
         generateAiContentButton.disabled = true;
         aiResultsArea.innerHTML = '<p>Pensando nas melhores ideias para você...</p>';
         const prompt = `Aja como um especialista em marketing para pequenos negócios locais no Brasil, com um tom de voz direto, persuasivo e que gera urgência, inspirado no estilo de Erico Rocha e com gatilhos mentais dos 7 pecados capitais. Meu negócio tem o seguinte objetivo: "${goal}". O tipo de postagem que eu quero criar é: "${selectedPostType}". Crie uma sugestão de post para o Google Business Profile contendo: 1. Uma Headline (título) curta, magnética e que use no máximo 58 caracteres. 2. Uma Copy (texto do post) com no máximo 1500 caracteres, usando quebras de linha para facilitar a leitura, emojis relevantes e hashtags. Formate a sua resposta EXATAMENTE da seguinte forma, sem nenhuma palavra ou formatação adicional: Headline: [Aqui a sua sugestão de headline] Copy: [Aqui a sua sugestão de copy]`;
-        const API_URL = 'https://api.deepseek.com/chat/completions';
+        const API_URL = '/.netlify/functions/generate-ideas';
         try {
             const response = await fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_API_KEY}` },
-                body: JSON.stringify({ model: "deepseek-chat", messages: [{ "role": "system", "content": "Você é um assistente prestativo." }, { "role": "user", "content": prompt }] })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: prompt })
             });
             if (!response.ok) throw new Error(`A resposta da rede não foi "ok". Status: ${response.status}`);
             const data = await response.json();
-            const content = data.choices[0].message.content;
+            const content = data.content;
             const headlineMatch = content.match(/Headline: (.*)/);
             const copyMatch = content.match(/Copy: ([\s\S]*)/);
-            if (!headlineMatch || !copyMatch) throw new Error("Formato da resposta da IA inesperado.");
-            const headline = headlineMatch[1];
-            const copy = copyMatch[1];
-            aiResultsArea.innerHTML = `<div class="ai-result-item"><h4>Sugestão de Headline</h4><p id="ai-headline-result">${headline}</p><button class="use-text-button" data-target="headline">Usar esta Headline</button></div><div class="ai-result-item"><h4>Sugestão de Copy</h4><p id="ai-copy-result">${copy.replace(/\n/g, '<br>')}</p><button class="use-text-button" data-target="copy">Usar esta Copy</button></div>`;
-        } catch (error) { console.error('Erro ao gerar conteúdo com IA:', error); aiResultsArea.innerHTML = '<p>Ocorreu um erro ao gerar as ideias. Verifique sua chave de API e tente novamente.</p>'; } finally { generateAiContentButton.textContent = 'Gerar Ideias'; generateAiContentButton.disabled = false; }
+            if (!headlineMatch || !copyMatch) {
+                const headlineIndex = content.indexOf("Headline:");
+                const copyIndex = content.indexOf("Copy:");
+                if (headlineIndex !== -1 && copyIndex !== -1) {
+                    const headline = content.substring(headlineIndex + 9, copyIndex).trim();
+                    const copy = content.substring(copyIndex + 5).trim();
+                    displayAiResults(headline, copy);
+                } else {
+                    throw new Error(content);
+                }
+            } else {
+                const headline = headlineMatch[1].trim();
+                const copy = copyMatch[1].trim();
+                displayAiResults(headline, copy);
+            }
+        } catch (error) { console.error('Erro ao gerar conteúdo com IA:', error); aiResultsArea.innerHTML = `<p>Ocorreu um erro. A IA respondeu, mas o formato foi inesperado. Tente refazer a pergunta.</p><p style="font-size: 0.8em; color: grey;">Resposta recebida: ${error.message}</p>`; } finally { generateAiContentButton.textContent = 'Gerar Ideias'; generateAiContentButton.disabled = false; }
+    }
+    function displayAiResults(headline, copy) {
+        aiResultsArea.innerHTML = `<div class="ai-result-item"><h4>Sugestão de Headline</h4><p id="ai-headline-result">${headline}</p><button class="use-text-button" data-target="headline">Usar esta Headline</button></div><div class="ai-result-item"><h4>Sugestão de Copy</h4><p id="ai-copy-result">${copy.replace(/\n/g, '<br>')}</p><button class="use-text-button" data-target="copy">Usar esta Copy</button></div>`;
     }
     function useAiText(event) {
         if (!event.target.classList.contains('use-text-button')) return;
