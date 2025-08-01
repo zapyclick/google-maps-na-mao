@@ -116,7 +116,7 @@ textarea:focus {
   margin-bottom: 1rem; /* Espaço entre a imagem e o botão de troca */
 }
 
-#change-image-button {
+ {
   /* Estilo de link para uma ação secundária */
   background: none;
   border: none;
@@ -127,12 +127,6 @@ textarea:focus {
   font-family: var(--fonte-principal);
 }
 /* --- Estilos para a Busca no Unsplash --- */
-
-.unsplash-search-container {
-  display: flex; /* Alinha o campo e o botão na mesma linha */
-  gap: 0.5rem; /* Espaço entre o campo e o botão */
-  margin-bottom: 1rem;
-}
 
 #unsplash-search-input {
   flex-grow: 1; /* Faz o campo de busca ocupar o espaço disponível */
@@ -659,5 +653,29 @@ input[type="range"] {
 }
 
 .use-text-button:active {
+  box-shadow: var(--sombra-neumorfica-inset);
+}
+/* Estilo para o botão de ação principal (Exportar) */
+.main-action-button {
+  /* Reutiliza o estilo do nosso botão principal original */
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--sombra-neumorfica);
+  transition: var(--transicao-padrao);
+  margin-top: 1.5rem; /* Adiciona um espaço acima */
+}
+
+.main-action-button:hover {
+  opacity: 0.9;
+}
+
+.main-action-button:active {
   box-shadow: var(--sombra-neumorfica-inset);
 }

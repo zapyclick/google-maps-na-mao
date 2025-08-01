@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const aiPostTypeButtonsContainer = document.getElementById('ai-post-type-buttons');
     const generateAiContentButton = document.getElementById('generate-ai-content-button');
     const aiResultsArea = document.getElementById('ai-results-area');
+    const exportPostButton = document.getElementById('export-post-button');
 
     // Inicialização da Fabric.js
     const fabricCanvas = new fabric.Canvas('image-canvas', { width: 800, height: 600, backgroundColor: '#ffffff' });
@@ -51,70 +52,45 @@ document.addEventListener('DOMContentLoaded', function() {
     function resetEditor() { fabricCanvas.clear(); fabricCanvas.setBackgroundImage(null, fabricCanvas.renderAll.bind(fabricCanvas)); editorArea.hidden = true; imageSelectionArea.hidden = false; }
     async function searchUnsplash(query) { if (!query) return; unsplashSearchButton.textContent = 'Buscando...'; unsplashSearchButton.disabled = true; const endpoint = `https://api.unsplash.com/search/photos?query=${query}&per_page=12&client_id=${UNSPLASH_ACCESS_KEY}`; try { const response = await fetch(endpoint); const data = await response.json(); if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = ''; if (data.results && data.results.length > 0) { data.results.forEach(photo => { const img = document.createElement('img'); img.src = photo.urls.small; img.classList.add('unsplash-image'); img.addEventListener('click', () => loadBackgroundImage(photo.urls.regular)); unsplashResultsContainer.appendChild(img); }); } else { if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = '<p>Nenhum resultado encontrado.</p>'; } } catch (error) { if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = '<p>Erro ao buscar imagens.</p>'; } finally { unsplashSearchButton.textContent = 'Buscar'; unsplashSearchButton.disabled = false; } }
 
-    // --- LÓGICA DO ASSISTENTE DE IA (COM LIMPEZA DE OBSERVAÇÕES) ---
+    // --- LÓGICA DO ASSISTENTE DE IA ---
     let selectedPostType = '';
-    function handlePostTypeSelection(event) {
-        const clickedButton = event.target.closest('.post-type-button');
-        if (!clickedButton) return;
-        aiPostTypeButtonsContainer.querySelectorAll('.post-type-button').forEach(button => button.classList.remove('active'));
-        clickedButton.classList.add('active');
-        selectedPostType = clickedButton.dataset.type;
-    }
-    async function generateAiContent() {
-        const goal = aiGoalInput.value;
-        if (!goal || !selectedPostType) { alert('Por favor, preencha seu objetivo e selecione um tipo de postagem.'); return; }
-        generateAiContentButton.textContent = 'Gerando...';
-        generateAiContentButton.disabled = true;
-        aiResultsArea.innerHTML = '<p>Pensando nas melhores ideias para você...</p>';
-        const prompt = `Aja como um especialista em marketing para pequenos negócios locais no Brasil, com um tom de voz direto, persuasivo e que gera urgência, inspirado no estilo de Erico Rocha e com gatilhos mentais dos 7 pecados capitais. IMPORTANTE: Use exclusivamente vocabulário e expressões do Português do Brasil (pt-BR). Meu negócio tem o seguinte objetivo: "${goal}". O tipo de postagem que eu quero criar é: "${selectedPostType}". Crie uma sugestão de post para o Google Business Profile contendo: 1. Uma Headline (título) curta, magnética e que use no máximo 58 caracteres. 2. Uma Copy (texto do post) com no máximo 1500 caracteres, usando quebras de linha para facilitar a leitura, emojis relevantes e hashtags. Formate a sua resposta EXATAMENTE da seguinte forma, sem nenhuma palavra ou formatação adicional: Headline: [Aqui a sua sugestão de headline] Copy: [Aqui a sua sugestão de copy]`;
-        const API_URL = '/.netlify/functions/generate-ideas';
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: prompt })
-            });
-            if (!response.ok) throw new Error(`A resposta da rede não foi "ok". Status: ${response.status}`);
-            const data = await response.json();
-            const content = data.content;
-            const headlineMatch = content.match(/Headline: (.*)/);
-            let copyMatch = content.match(/Copy: ([\s\S]*)/);
-            if (!headlineMatch || !copyMatch) {
-                const headlineIndex = content.indexOf("Headline:");
-                const copyIndex = content.indexOf("Copy:");
-                if (headlineIndex !== -1 && copyIndex !== -1) {
-                    let headline = content.substring(headlineIndex + 9, copyIndex).trim();
-                    let copy = content.substring(copyIndex + 5).trim();
-                    const obsIndex = copy.indexOf("Observações:");
-                    if (obsIndex !== -1) { copy = copy.substring(0, obsIndex).trim(); }
-                    displayAiResults(headline, copy);
-                } else {
-                    throw new Error(content);
-                }
-            } else {
-                let headline = headlineMatch[1].trim();
-                let copy = copyMatch[1].trim();
-                const obsIndex = copy.indexOf("Observações:");
-                if (obsIndex !== -1) { copy = copy.substring(0, obsIndex).trim(); }
-                displayAiResults(headline, copy);
-            }
-        } catch (error) { console.error('Erro ao gerar conteúdo com IA:', error); aiResultsArea.innerHTML = `<p>Ocorreu um erro. A IA respondeu, mas o formato foi inesperado. Tente refazer a pergunta.</p><p style="font-size: 0.8em; color: grey;">Resposta recebida: ${error.message}</p>`; } finally { generateAiContentButton.textContent = 'Gerar Ideias'; generateAiContentButton.disabled = false; }
-    }
-    function displayAiResults(headline, copy) {
-        aiResultsArea.innerHTML = `<div class="ai-result-item"><h4>Sugestão de Assunto</h4><p id="ai-headline-result">${headline}</p><button class="use-text-button" data-target="headline">Usar este assunto</button></div><div class="ai-result-item"><h4>Sugestão de Texto</h4><p id="ai-copy-result">${copy.replace(/\n/g, '<br>')}</p><button class="use-text-button" data-target="copy">Usar este Texto</button></div>`;
-    }
+    function handlePostTypeSelection(event) { const clickedButton = event.target.closest('.post-type-button'); if (!clickedButton) return; aiPostTypeButtonsContainer.querySelectorAll('.post-type-button').forEach(button => button.classList.remove('active')); clickedButton.classList.add('active'); selectedPostType = clickedButton.dataset.type; }
+    async function generateAiContent() { const goal = aiGoalInput.value; if (!goal || !selectedPostType) { alert('Por favor, preencha seu objetivo e selecione um tipo de postagem.'); return; } generateAiContentButton.textContent = 'Gerando...'; generateAiContentButton.disabled = true; aiResultsArea.innerHTML = '<p>Pensando nas melhores ideias para você...</p>'; const prompt = `Aja como um especialista em marketing para pequenos negócios locais no Brasil, com um tom de voz direto, persuasivo e que gera urgência, inspirado no estilo de Erico Rocha e com gatilhos mentais dos 7 pecados capitais. IMPORTANTE: Use exclusivamente vocabulário e expressões do Português do Brasil (pt-BR). Meu negócio tem o seguinte objetivo: "${goal}". O tipo de postagem que eu quero criar é: "${selectedPostType}". Crie uma sugestão de post para o Google Business Profile contendo: 1. Uma Headline (título) curta, magnética e que use no máximo 58 caracteres. 2. Uma Copy (texto do post) com no máximo 1500 caracteres, usando quebras de linha para facilitar a leitura, emojis relevantes e hashtags. Formate a sua resposta EXATAMENTE da seguinte forma, sem nenhuma palavra ou formatação adicional: Headline: [Aqui a sua sugestão de headline] Copy: [Aqui a sua sugestão de copy]`; const API_URL = '/.netlify/functions/generate-ideas'; try { const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: prompt }) }); if (!response.ok) throw new Error(`A resposta da rede não foi "ok". Status: ${response.status}`); const data = await response.json(); const content = data.content; const headlineMatch = content.match(/Headline: (.*)/); let copyMatch = content.match(/Copy: ([\s\S]*)/); if (!headlineMatch || !copyMatch) { const headlineIndex = content.indexOf("Headline:"); const copyIndex = content.indexOf("Copy:"); if (headlineIndex !== -1 && copyIndex !== -1) { let headline = content.substring(headlineIndex + 9, copyIndex).trim(); let copy = content.substring(copyIndex + 5).trim(); const obsIndex = copy.indexOf("Observações:"); if (obsIndex !== -1) { copy = copy.substring(0, obsIndex).trim(); } displayAiResults(headline, copy); } else { throw new Error(content); } } else { let headline = headlineMatch[1].trim(); let copy = copyMatch[1].trim(); const obsIndex = copy.indexOf("Observações:"); if (obsIndex !== -1) { copy = copy.substring(0, obsIndex).trim(); } displayAiResults(headline, copy); } } catch (error) { console.error('Erro ao gerar conteúdo com IA:', error); aiResultsArea.innerHTML = `<p>Ocorreu um erro. A IA respondeu, mas o formato foi inesperado. Tente refazer a pergunta.</p><p style="font-size: 0.8em; color: grey;">Resposta recebida: ${error.message}</p>`; } finally { generateAiContentButton.textContent = 'Gerar Ideias'; generateAiContentButton.disabled = false; } }
+    function displayAiResults(headline, copy) { aiResultsArea.innerHTML = `<div class="ai-result-item"><h4>Sugestão de Assunto</h4><p id="ai-headline-result">${headline}</p><button class="use-text-button" data-target="headline">Usar este assunto</button></div><div class="ai-result-item"><h4>Sugestão de Texto</h4><p id="ai-copy-result">${copy.replace(/\n/g, '<br>')}</p><button class="use-text-button" data-target="copy">Usar este Texto</button></div>`; }
     function useAiText(event) {
         if (!event.target.classList.contains('use-text-button')) return;
         const target = event.target.dataset.target;
+        const button = event.target;
         if (target === 'headline') {
             const headlineText = document.getElementById('ai-headline-result').innerText;
             postTitle.value = headlineText;
-            aiDrawer.classList.remove('open');
+            button.textContent = 'Assunto Copiado!';
+            button.disabled = true;
         } else if (target === 'copy') {
             const copyText = document.getElementById('ai-copy-result').innerText;
             postTextarea.value = copyText;
             aiDrawer.classList.remove('open');
         }
+    }
+
+    // --- FUNÇÃO DE EXPORTAÇÃO ---
+    function exportPost(event) {
+        event.preventDefault();
+        fabricCanvas.discardActiveObject().renderAll();
+        const dataURL = fabricCanvas.toDataURL({ format: 'png', quality: 0.9 });
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'post-google-maps-na-mao.png';
+        link.click();
+        const titleText = postTitle.value;
+        const bodyText = postTextarea.value;
+        const fullText = `${titleText}\n\n${bodyText}`;
+        navigator.clipboard.writeText(fullText.trim()).then(() => {
+            alert('Sucesso!\n\n✅ Sua imagem foi baixada.\n✅ Seu texto foi copiado para a área de transferência.\n\nAgora é só postar no Google!');
+        }).catch(err => {
+            console.error('Falha ao copiar o texto: ', err);
+            alert('Sua imagem foi baixada, mas houve uma falha ao copiar o texto.');
+        });
     }
 
     // --- FUNÇÃO DE INICIALIZAÇÃO DOS EVENTOS ---
@@ -140,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (aiPostTypeButtonsContainer) { aiPostTypeButtonsContainer.addEventListener('click', handlePostTypeSelection); }
         if (generateAiContentButton) { generateAiContentButton.addEventListener('click', generateAiContent); }
         if (aiResultsArea) { aiResultsArea.addEventListener('click', useAiText); }
+        if (exportPostButton) { exportPostButton.addEventListener('click', exportPost); }
     }
 
     // --- EXECUÇÃO ---
