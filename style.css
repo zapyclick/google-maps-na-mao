@@ -626,3 +626,38 @@ input[type="range"] {
   font-family: var(--fonte-principal);
   padding: 0;
 }
+/* Estilo para o novo campo de Assunto */
+#post-title {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--cor-fundo);
+  font-family: var(--fonte-principal);
+  font-size: 1rem;
+  color: var(--cor-texto-principal);
+  box-shadow: var(--sombra-neumorfica-inset);
+}
+
+/* Novo estilo para os botões "Usar este..." */
+.use-text-button {
+  background: var(--cor-superficie);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-family: var(--fonte-principal);
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  box-shadow: var(--sombra-neumorfica);
+  transition: var(--transicao-padrao);
+  text-decoration: none; /* Remove o sublinhado antigo */
+}
+
+.use-text-button:hover {
+  color: var(--cor-primaria);
+}
+
+.use-text-button:active {
+  box-shadow: var(--sombra-neumorfica-inset);
+}

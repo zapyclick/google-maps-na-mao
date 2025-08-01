@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const aiAssistantButton = document.getElementById('ai-assistant-button');
     const aiDrawer = document.getElementById('ai-drawer');
     const closeAiDrawerButton = document.getElementById('close-ai-drawer-button');
+    const postTitle = document.getElementById('post-title');
     const postTextarea = document.getElementById('post-text');
     const aiGoalInput = document.getElementById('ai-goal-input');
     const aiPostTypeButtonsContainer = document.getElementById('ai-post-type-buttons');
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function resetEditor() { fabricCanvas.clear(); fabricCanvas.setBackgroundImage(null, fabricCanvas.renderAll.bind(fabricCanvas)); editorArea.hidden = true; imageSelectionArea.hidden = false; }
     async function searchUnsplash(query) { if (!query) return; unsplashSearchButton.textContent = 'Buscando...'; unsplashSearchButton.disabled = true; const endpoint = `https://api.unsplash.com/search/photos?query=${query}&per_page=12&client_id=${UNSPLASH_ACCESS_KEY}`; try { const response = await fetch(endpoint); const data = await response.json(); if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = ''; if (data.results && data.results.length > 0) { data.results.forEach(photo => { const img = document.createElement('img'); img.src = photo.urls.small; img.classList.add('unsplash-image'); img.addEventListener('click', () => loadBackgroundImage(photo.urls.regular)); unsplashResultsContainer.appendChild(img); }); } else { if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = '<p>Nenhum resultado encontrado.</p>'; } } catch (error) { if (unsplashResultsContainer) unsplashResultsContainer.innerHTML = '<p>Erro ao buscar imagens.</p>'; } finally { unsplashSearchButton.textContent = 'Buscar'; unsplashSearchButton.disabled = false; } }
 
-    // --- LÓGICA DO ASSISTENTE DE IA (COM LEITURA ROBUSTA) ---
+    // --- LÓGICA DO ASSISTENTE DE IA (COM LIMPEZA DE OBSERVAÇÕES) ---
     let selectedPostType = '';
     function handlePostTypeSelection(event) {
         const clickedButton = event.target.closest('.post-type-button');
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         generateAiContentButton.textContent = 'Gerando...';
         generateAiContentButton.disabled = true;
         aiResultsArea.innerHTML = '<p>Pensando nas melhores ideias para você...</p>';
-        const prompt = `Aja como um especialista em marketing para pequenos negócios locais no Brasil, com um tom de voz direto, persuasivo e que gera urgência, inspirado no estilo de Erico Rocha e com gatilhos mentais dos 7 pecados capitais. Meu negócio tem o seguinte objetivo: "${goal}". O tipo de postagem que eu quero criar é: "${selectedPostType}". Crie uma sugestão de post para o Google Business Profile contendo: 1. Uma Headline (título) curta, magnética e que use no máximo 58 caracteres. 2. Uma Copy (texto do post) com no máximo 1500 caracteres, usando quebras de linha para facilitar a leitura, emojis relevantes e hashtags. Formate a sua resposta EXATAMENTE da seguinte forma, sem nenhuma palavra ou formatação adicional: Headline: [Aqui a sua sugestão de headline] Copy: [Aqui a sua sugestão de copy]`;
+        const prompt = `Aja como um especialista em marketing para pequenos negócios locais no Brasil, com um tom de voz direto, persuasivo e que gera urgência, inspirado no estilo de Erico Rocha e com gatilhos mentais dos 7 pecados capitais. IMPORTANTE: Use exclusivamente vocabulário e expressões do Português do Brasil (pt-BR). Meu negócio tem o seguinte objetivo: "${goal}". O tipo de postagem que eu quero criar é: "${selectedPostType}". Crie uma sugestão de post para o Google Business Profile contendo: 1. Uma Headline (título) curta, magnética e que use no máximo 58 caracteres. 2. Uma Copy (texto do post) com no máximo 1500 caracteres, usando quebras de linha para facilitar a leitura, emojis relevantes e hashtags. Formate a sua resposta EXATAMENTE da seguinte forma, sem nenhuma palavra ou formatação adicional: Headline: [Aqui a sua sugestão de headline] Copy: [Aqui a sua sugestão de copy]`;
         const API_URL = '/.netlify/functions/generate-ideas';
         try {
             const response = await fetch(API_URL, {
@@ -77,31 +78,39 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             const content = data.content;
             const headlineMatch = content.match(/Headline: (.*)/);
-            const copyMatch = content.match(/Copy: ([\s\S]*)/);
+            let copyMatch = content.match(/Copy: ([\s\S]*)/);
             if (!headlineMatch || !copyMatch) {
                 const headlineIndex = content.indexOf("Headline:");
                 const copyIndex = content.indexOf("Copy:");
                 if (headlineIndex !== -1 && copyIndex !== -1) {
-                    const headline = content.substring(headlineIndex + 9, copyIndex).trim();
-                    const copy = content.substring(copyIndex + 5).trim();
+                    let headline = content.substring(headlineIndex + 9, copyIndex).trim();
+                    let copy = content.substring(copyIndex + 5).trim();
+                    const obsIndex = copy.indexOf("Observações:");
+                    if (obsIndex !== -1) { copy = copy.substring(0, obsIndex).trim(); }
                     displayAiResults(headline, copy);
                 } else {
                     throw new Error(content);
                 }
             } else {
-                const headline = headlineMatch[1].trim();
-                const copy = copyMatch[1].trim();
+                let headline = headlineMatch[1].trim();
+                let copy = copyMatch[1].trim();
+                const obsIndex = copy.indexOf("Observações:");
+                if (obsIndex !== -1) { copy = copy.substring(0, obsIndex).trim(); }
                 displayAiResults(headline, copy);
             }
         } catch (error) { console.error('Erro ao gerar conteúdo com IA:', error); aiResultsArea.innerHTML = `<p>Ocorreu um erro. A IA respondeu, mas o formato foi inesperado. Tente refazer a pergunta.</p><p style="font-size: 0.8em; color: grey;">Resposta recebida: ${error.message}</p>`; } finally { generateAiContentButton.textContent = 'Gerar Ideias'; generateAiContentButton.disabled = false; }
     }
     function displayAiResults(headline, copy) {
-        aiResultsArea.innerHTML = `<div class="ai-result-item"><h4>Sugestão de Headline</h4><p id="ai-headline-result">${headline}</p><button class="use-text-button" data-target="headline">Usar esta Headline</button></div><div class="ai-result-item"><h4>Sugestão de Copy</h4><p id="ai-copy-result">${copy.replace(/\n/g, '<br>')}</p><button class="use-text-button" data-target="copy">Usar esta Copy</button></div>`;
+        aiResultsArea.innerHTML = `<div class="ai-result-item"><h4>Sugestão de Assunto</h4><p id="ai-headline-result">${headline}</p><button class="use-text-button" data-target="headline">Usar este assunto</button></div><div class="ai-result-item"><h4>Sugestão de Texto</h4><p id="ai-copy-result">${copy.replace(/\n/g, '<br>')}</p><button class="use-text-button" data-target="copy">Usar este Texto</button></div>`;
     }
     function useAiText(event) {
         if (!event.target.classList.contains('use-text-button')) return;
         const target = event.target.dataset.target;
-        if (target === 'copy') {
+        if (target === 'headline') {
+            const headlineText = document.getElementById('ai-headline-result').innerText;
+            postTitle.value = headlineText;
+            aiDrawer.classList.remove('open');
+        } else if (target === 'copy') {
             const copyText = document.getElementById('ai-copy-result').innerText;
             postTextarea.value = copyText;
             aiDrawer.classList.remove('open');
