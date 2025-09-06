@@ -19,6 +19,12 @@
       <input type="file" id="fileInput" accept="image/*" capture="environment" multiple />
       <div id="imagePreview" class="image-preview"></div>
     </section>
+    <section class="card">
+  <h2>Buscar imagens (Unsplash)</h2>
+  <input id="unsplashQuery" placeholder="Digite palavra-chave (ex: padaria, café)" />
+  <div id="unsplashResults" class="image-preview"></div>
+</section>
+
 
     <!-- Tipo de postagem -->
     <section class="card">
@@ -58,10 +64,22 @@
     <a href="LINK_PAYPAL" target="_blank" class="btn contrast">PayPal</a>
     <a href="LINK_KOFI" target="_blank" class="btn contrast">Ko-fi</a>
   </div>
+  <!-- Modal do Pix -->
+<div id="pixModal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <h3>Doe via Pix</h3>
+    <div id="pixQRCode"></div>
+    <p>Use seu app de banco para escanear o QR Code.</p>
+  </div>
+</div>
+
 </section>
 
   </footer>
 
   <script src="app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 </body>
 </html>

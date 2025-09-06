@@ -119,4 +119,107 @@ donationButtons.forEach(btn => {
     console.log(`Botões de doação clicados: ${count} vezes`);
   });
 });
+// --- Pix QR Code ---
+const pixBtn = document.querySelector(".donation-buttons .btn[href*='PIX']");
+const modal = document.getElementById("pixModal");
+const closeModal = document.getElementById("closeModal");
+const pixQRCodeDiv = document.getElementById("pixQRCode");
+
+// Seu Pix (chave ou payload)
+const pixKey = "SEU_PIX_AQUI"; // Ex: chave Pix ou payload Copia e Cola
+
+// Ao clicar no botão Pix, abre modal e gera QR Code
+pixBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  pixQRCodeDiv.innerHTML = ""; // Limpa QR anterior
+  new QRCode(pixQRCodeDiv, {
+    text: pixKey,
+    width: 200,
+    height: 200,
+  });
+  modal.style.display = "block";
+});
+
+// Fechar modal
+closeModal.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// Fechar clicando fora do modal
+window.addEventListener("click", (e) => {
+  if (e.target == modal) {
+    modal.style.display = "none";
+  }
+});
+// --- Integração com Unsplash ---
+const input = document.getElementById('unsplashQuery');
+const results = document.getElementById('unsplashResults');
+
+if (input && results) {
+  let timer = null;
+  const DEBOUNCE_MS = 500;
+
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    const q = input.value.trim();
+    if (!q) {
+      results.innerHTML = '';
+      return;
+    }
+    timer = setTimeout(() => doSearch(q), DEBOUNCE_MS);
+  });
+
+  async function doSearch(q) {
+    const cacheKey = `unsplash:${q}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      render(JSON.parse(cached));
+      return;
+    }
+
+    try {
+      const resp = await fetch(
+        `/.netlify/functions/unsplash-search?q=${encodeURIComponent(q)}&per_page=12`
+      );
+      if (!resp.ok) {
+        results.innerHTML = `<p>Erro na busca: ${resp.status}</p>`;
+        return;
+      }
+      const data = await resp.json();
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
+      render(data);
+    } catch (e) {
+      console.error(e);
+      results.innerHTML = `<p>Erro de conexão.</p>`;
+    }
+  }
+
+  function render(data) {
+    results.innerHTML = '';
+    if (!data.results || data.results.length === 0) {
+      results.innerHTML = '<p>Nenhuma imagem encontrada.</p>';
+      return;
+    }
+    data.results.forEach((photo) => {
+      const card = document.createElement('div');
+      card.className = 'image-card';
+
+      const img = document.createElement('img');
+      img.src = photo.urls.small;
+      img.alt = photo.alt_description || 'Imagem do Unsplash';
+      img.loading = 'lazy';
+
+      const credit = document.createElement('a');
+      credit.href = `${photo.user.links.html}?utm_source=google-maps-na-mao&utm_medium=referral`;
+      credit.target = '_blank';
+      credit.rel = 'noopener noreferrer';
+      credit.textContent = `${photo.user.name} / Unsplash`;
+
+      card.appendChild(img);
+      card.appendChild(credit);
+      results.appendChild(card);
+    });
+  }
+}
+
 
