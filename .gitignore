@@ -6,10 +6,14 @@ yarn-error.log*
 # Dependências (se usar pacotes futuramente)
 node_modules/
 
-# Build outputs (Netlify não precisa, mas para segurança)
+# Build outputs (caso use bundlers depois)
 dist/
 build/
 
 # Sistema operacional
 .DS_Store
 Thumbs.db
+
+# Arquivos temporários
+*.tmp
+*.swp

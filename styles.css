@@ -1,0 +1,113 @@
+/* ======= Reset ======= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #e0e0e0;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ======= Header ======= */
+.header {
+  text-align: center;
+  padding: 2rem;
+  background: #e0e0e0;
+  box-shadow: inset 6px 6px 12px #bebebe,
+              inset -6px -6px 12px #ffffff;
+}
+
+.header h1 {
+  color: #4285F4; /* Azul Google */
+}
+
+/* ======= Container ======= */
+.container {
+  flex: 1;
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+/* ======= Cards ======= */
+.card {
+  padding: 1.5rem;
+  border-radius: 20px;
+  background: #e0e0e0;
+  box-shadow: inset 8px 8px 16px #bebebe,
+              inset -8px -8px 16px #ffffff;
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  color: #34A853; /* Verde Google */
+}
+
+/* ======= Botões ======= */
+.btn {
+  border: none;
+  padding: 0.8rem 1.5rem;
+  margin: 0.3rem;
+  border-radius: 30px;
+  background: #e0e0e0;
+  box-shadow: 6px 6px 12px #bebebe,
+              -6px -6px 12px #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  box-shadow: inset 6px 6px 12px #bebebe,
+              inset -6px -6px 12px #ffffff;
+}
+
+.btn.contrast {
+  background: #EA4335; /* Vermelho Google */
+  color: #fff;
+}
+
+/* ======= Textarea ======= */
+textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: none;
+  border-radius: 20px;
+  resize: vertical;
+  background: #e0e0e0;
+  box-shadow: inset 8px 8px 16px #bebebe,
+              inset -8px -8px 16px #ffffff;
+}
+
+/* ======= Imagens ======= */
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.image-preview img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 4px 4px 8px #bebebe,
+              -4px -4px 8px #ffffff;
+}
+
+/* ======= Footer ======= */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background: #e0e0e0;
+  font-size: 0.9rem;
+  box-shadow: inset 6px 6px 12px #bebebe,
+              inset -6px -6px 12px #ffffff;
+}

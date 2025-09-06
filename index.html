@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Maps na Mão</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Google Maps na Mão</h1>
+    <p>Crie suas postagens para o Google Business Profile</p>
+  </header>
+
+  <main class="container">
+    <!-- Upload de imagens -->
+    <section class="card">
+      <h2>Imagens</h2>
+      <input type="file" id="fileInput" accept="image/*" capture="environment" multiple />
+      <div id="imagePreview" class="image-preview"></div>
+    </section>
+
+    <!-- Tipo de postagem -->
+    <section class="card">
+      <h2>Tipo de Postagem</h2>
+      <div class="button-group">
+        <button class="btn" data-type="promo">Promoção</button>
+        <button class="btn" data-type="novidade">Novidade</button>
+        <button class="btn" data-type="evento">Evento</button>
+      </div>
+    </section>
+
+    <!-- Geração de texto -->
+    <section class="card">
+      <h2>Gerar Texto</h2>
+      <textarea id="postText" placeholder="O texto gerado aparecerá aqui..."></textarea>
+      <button id="generateBtn" class="btn contrast">Gerar Ideia</button>
+    </section>
+
+    <!-- Salvar e exportar -->
+    <section class="card">
+      <h2>Salvar Postagem</h2>
+      <button id="saveBtn" class="btn">Salvar Localmente</button>
+      <button id="exportBtn" class="btn">Exportar JSON</button>
+      <input type="file" id="importInput" accept="application/json" hidden />
+      <button id="importBtn" class="btn">Importar JSON</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Feito com ❤️ para pequenos negócios</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
