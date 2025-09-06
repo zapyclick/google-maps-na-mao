@@ -34,7 +34,7 @@ export default async (req, context) => {
 
     const res = await fetch(apiUrl, {
       headers: {
-        Authorization: `Client-ID ${UNSPLASH_KEY}`,
+        Authorization: `Client-ID ${KBW9bmH_7GwSA7phZx06SDUcQ4ZCatAmFFjCL5PLgLI}`,
         'Accept-Version': 'v1',
       },
     });
