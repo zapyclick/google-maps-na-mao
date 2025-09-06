@@ -108,3 +108,15 @@ importInput.addEventListener("change", (e) => {
   };
   reader.readAsText(file);
 });
+// Contador de cliques nas doações
+const donationButtons = document.querySelectorAll(".donation-buttons .btn");
+
+donationButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    let count = localStorage.getItem("donationClicks") || 0;
+    count = parseInt(count) + 1;
+    localStorage.setItem("donationClicks", count);
+    console.log(`Botões de doação clicados: ${count} vezes`);
+  });
+});
+

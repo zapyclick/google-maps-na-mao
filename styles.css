@@ -111,3 +111,15 @@ textarea {
   box-shadow: inset 6px 6px 12px #bebebe,
               inset -6px -6px 12px #ffffff;
 }
+.donation-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.donation-buttons .btn {
+  flex: 1;
+  text-align: center;
+}
+
